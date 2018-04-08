@@ -29,6 +29,8 @@
 
 #import "patchfinder64.h"
 
+#include "utils.h"
+
 #define vm_address_t mach_vm_address_t
 
 mach_port_t tfp0=0;
@@ -879,20 +881,38 @@ remappage[remapcnt++] = (x & (~PMK));\
                 open("/.installed_yaluX", O_RDWR|O_CREAT);
                 open("/.cydia_no_stash",O_RDWR|O_CREAT);
                 
+                //
+//#if __IPHONE_OS_VERSION_MAX_ALLOWED < 110000//__IPHONE_11_0
                 
-                system("echo '127.0.0.1 iphonesubmissions.apple.com' >> /etc/hosts");
-                system("echo '127.0.0.1 radarsubmissions.apple.com' >> /etc/hosts");
+            NSLog(@"__IPHONE_OS_VERSION_MAX_ALLOWED");
+//               system("echo '127.0.0.1 iphonesubmissions.apple.com' >> /etc/hosts");
+//               system("echo '127.0.0.1 radarsubmissions.apple.com' >> /etc/hosts");
                 
-                system("/usr/bin/uicache");
+                popen("echo '127.0.0.1 iphonesubmissions.apple.com' >> /etc/hosts","r");
+                popen("echo '127.0.0.1 radarsubmissions.apple.com' >> /etc/hosts","r");
+
+//               system("/usr/bin/uicache");
                 
-                system("killall -SIGSTOP cfprefsd");
+                popen("/usr/bin/uicache","r");
+//                popen(,"r");
+                //popen(command.c_str(), "r");
+                
+//                system(command.c_str())
+                
+//               system("killall -SIGSTOP cfprefsd");
+                
+                popen("killall -SIGSTOP cfprefsd","r");
+
                 NSMutableDictionary* md = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/com.apple.springboard.plist"];
                 
                 [md setObject:[NSNumber numberWithBool:YES] forKey:@"SBShowNonDefaultSystemApps"];
                 
                 [md writeToFile:@"/var/mobile/Library/Preferences/com.apple.springboard.plist" atomically:YES];
-                system("killall -9 cfprefsd");
+//               system("killall -9 cfprefsd");
                 
+                popen("killall -9 cfprefsd","r");
+
+//#endif
             }
             {
                 NSString* jlaunchctl = [execpath stringByAppendingPathComponent:@"reload"];
@@ -928,8 +948,16 @@ remappage[remapcnt++] = (x & (~PMK));\
     chmod("/private/var/mobile", 0777);
     chmod("/private/var/mobile/Library", 0777);
     chmod("/private/var/mobile/Library/Preferences", 0777);
-    system("rm -rf /var/MobileAsset/Assets/com_apple_MobileAsset_SoftwareUpdate; touch /var/MobileAsset/Assets/com_apple_MobileAsset_SoftwareUpdate; chmod 000 /var/MobileAsset/Assets/com_apple_MobileAsset_SoftwareUpdate; chown 0:0 /var/MobileAsset/Assets/com_apple_MobileAsset_SoftwareUpdate");
-    system("(echo 'really jailbroken'; /bin/launchctl load /Library/LaunchDaemons/0.reload.plist)&");
+    
+//#if __IPHONE_OS_VERSION_MAX_ALLOWED < 110000//__IPHONE_11_0
+//   system("rm -rf /var/MobileAsset/Assets/com_apple_MobileAsset_SoftwareUpdate; touch /var/MobileAsset/Assets/com_apple_MobileAsset_SoftwareUpdate; chmod 000 /var/MobileAsset/Assets/com_apple_MobileAsset_SoftwareUpdate; chown 0:0 /var/MobileAsset/Assets/com_apple_MobileAsset_SoftwareUpdate");
+//   system("(echo 'really jailbroken'; /bin/launchctl load /Library/LaunchDaemons/0.reload.plist)&");
+    
+    popen("rm -rf /var/MobileAsset/Assets/com_apple_MobileAsset_SoftwareUpdate; touch /var/MobileAsset/Assets/com_apple_MobileAsset_SoftwareUpdate; chmod 000 /var/MobileAsset/Assets/com_apple_MobileAsset_SoftwareUpdate; chown 0:0 /var/MobileAsset/Assets/com_apple_MobileAsset_SoftwareUpdate","r");
+
+    popen("(echo 'really jailbroken'; /bin/launchctl load /Library/LaunchDaemons/0.reload.plist)&","r");
+
+//#endif
     WriteAnywhere64(bsd_task+0x100, orig_cred);
     sleep(2);
     
