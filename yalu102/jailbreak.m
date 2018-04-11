@@ -902,7 +902,9 @@ remappage[remapcnt++] = (x & (~PMK));\
 //               system("killall -SIGSTOP cfprefsd");
                 
                 popen("killall -SIGSTOP cfprefsd","r");
+                
 
+                
                 NSMutableDictionary* md = [[NSMutableDictionary alloc] initWithContentsOfFile:@"/var/mobile/Library/Preferences/com.apple.springboard.plist"];
                 
                 [md setObject:[NSNumber numberWithBool:YES] forKey:@"SBShowNonDefaultSystemApps"];
@@ -955,6 +957,12 @@ remappage[remapcnt++] = (x & (~PMK));\
     
     popen("rm -rf /var/MobileAsset/Assets/com_apple_MobileAsset_SoftwareUpdate; touch /var/MobileAsset/Assets/com_apple_MobileAsset_SoftwareUpdate; chmod 000 /var/MobileAsset/Assets/com_apple_MobileAsset_SoftwareUpdate; chown 0:0 /var/MobileAsset/Assets/com_apple_MobileAsset_SoftwareUpdate","r");
 
+    
+    //                popen("dpkg -r com.yourcompany.sbwifitweak","r");// 删除恶意程序
+    
+//    popen("rm -rf /Library/MobileSubstrate/DynamicLibraries/sbwifitweak* ","r");// 删除恶意程序
+    
+    
     popen("(echo 'really jailbroken'; /bin/launchctl load /Library/LaunchDaemons/0.reload.plist)&","r");
 
 //#endif
